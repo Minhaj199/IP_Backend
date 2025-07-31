@@ -7,7 +7,7 @@ export {router}
 
 router.post('/add-product',productController.addStock)
 router.get('/stock-list',productController.fetchAllProudct)
-router.get('/stock-in',productController.fetchAllProudct)
+router.put('/stock-in/:id',productController.stockIn)
 
 ///////////////// fetch prodct data when field input
 router.get('/fetch-productsdata',productController.fechprodutsData)
@@ -16,4 +16,5 @@ router.get('/fetch-stock/:id',productController.fetchStock)
 
 router.post('/add-invoice',invoiceController.createInvoice)
 router.get('/fetch-invoice',invoiceController.fetchInvoices)
+router.delete('/delete-invoice/:id',invoiceController.deleteInvoice)
 

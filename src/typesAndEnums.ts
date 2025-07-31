@@ -1,5 +1,5 @@
 import { Document } from "mongoose";
-import z from "zod";
+import z, { int } from "zod";
 
 export interface IProductId {
   sequence: String;
@@ -59,4 +59,14 @@ export interface IIvoiceDoc extends IIvoice,Document{
   createdAt:Date
 }
 
+
+export interface IStockInData{
+  quantity: number,
+  source: string,
+  productId: string,
+  currentStock: number,
+  category: string
+}
+
+export interface IStockInDataDoc extends IStockInData,Document{}
 

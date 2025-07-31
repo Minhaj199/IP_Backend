@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import { invoiceSchema, selectedItemSchema } from "../utils/validator";
 import { AppError } from "../errors/customError";
-import { ZodIssue } from "zod";
+import z, { ZodIssue } from "zod";
 import { HttpStatus } from "../constrains/statusCodeContrain";
 import { zodArrayFormater, zodFormatedEror } from "../utils/zodFormater";
 import { ErrorType } from "../constrains/ErrorTypes";
-import { InvoiceStockAndTotolValidator } from "../services/invoiceServices";
+import { InvoiceCreation, InvoiceDeletion } from "../services/invoiceServices";
 import { ERROR_MESSAGES } from "../constrains/Messages";
 import { invoiceModel } from "../model/InvoiceModel";
 import { invoiceDate } from "../utils/formators";
@@ -23,7 +23,7 @@ export const invoiceController = {
       const validateItems = selectedItemSchema.safeParse(selectedItems);
       if (validateCustomAndTotal.success) {
         if (validateItems.success) {
-          const resut = await InvoiceStockAndTotolValidator(
+          const resut = await InvoiceCreation(
             validateItems.data,
             validateCustomAndTotal.data.totalAmount,
             customerName,
@@ -72,5 +72,27 @@ export const invoiceController = {
       } 
       throw new Error(ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
     }
+  },
+  deleteInvoice:async (req: Request, res: Response, next: NextFunction) =>{
+      try {
+        const {id}=req.params
+        
+        if(!id||id.length<3)throw new Error('not valid parms')
+        const validateData=selectedItemSchema.safeParse(req.body.items)
+          if(validateData.success){
+            const result=await InvoiceDeletion(validateData.data,id)
+            if(result){
+              res.json({success:true})
+
+            }else{
+              throw new Error(ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+            }
+          }else{
+            throw new AppError('zod validation error',HttpStatus.BAD_REQUEST,ErrorType.GeneralError,zodArrayFormater( validateData.error.issues))
+          }
+      } catch (error) {
+     
+      next(error)    
+      }
   }
 };

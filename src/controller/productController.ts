@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { ProductSchema, selectedItemSchema } from "../utils/validator";
+import { ProductSchema, selectedItemSchema, stockInSchema } from "../utils/validator";
 import { AppError } from "../errors/customError";
 import { HttpStatus } from "../constrains/statusCodeContrain";
 import { ErrorType } from "../constrains/ErrorTypes";
@@ -10,6 +10,7 @@ import { generateProductId } from "../utils/idGenerator";
 import { capitalizeFirstLetter } from "../utils/firstLetterCapitalisor";
 import { productIdModel } from "../model/idSequence";
 import { ERROR_MESSAGES } from "../constrains/Messages";
+import { addStockIn } from "../services/productServices";
 
 export const productController = {
   addStock: async (req: Request, res: Response, next: NextFunction) => {
@@ -116,4 +117,21 @@ export const productController = {
        throw new Error(ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
      }
   },
+  stockIn:async (req: Request, res: Response, next: NextFunction) =>{
+    try {
+      const {id} =req.params
+      if(!id||id.length<3){
+        throw new Error('id not found')
+      }
+      const validateUpdateData=stockInSchema.safeParse(req.body)
+      if(validateUpdateData.success){
+        await addStockIn(validateUpdateData.data,id)
+        res.json({success:true})
+      }else{
+        throw new AppError('zod error',HttpStatus.BAD_REQUEST,ErrorType.FieldError,zodFormatedEror(validateUpdateData.error))
+      }
+    } catch (error) {
+      next(error)
+    }
+  }
 };

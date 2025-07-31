@@ -1,4 +1,4 @@
-import z from "zod";
+import z, { optional } from "zod";
 import { ZOD_CATEGORY, ZODE_UNITES } from "../typesAndEnums";
 
 export const envSchema = z.object({
@@ -38,14 +38,13 @@ export const invoiceSchema = z.object({
   customerPhone: z.string().regex(/^[0-9]{10,14}$/, "Phone number must be 10 digits"),
   totalAmount: z.number().nonnegative("Total amount must be 0 or more")
 })
-// .refine(
-//   data => {
-//     const calculatedTotal = data.selectedItems.reduce((sum, item) => sum + item.total, 0);
-//     return calculatedTotal === data.totalAmount;
-//   },
-//   {
-//     message: "Total amount must match sum of item totals",
-//     path: ["totalAmount"]
-//   }
-// );
 
+export const stockInSchema = z.object({
+  quantity: z.coerce.number('quenatity required').positive('possitive number required').int('decimimal value not find'),
+  source: z.string('source required').trim().min(2,'please add more word').max(50,'max limit reached'),
+  remark:z.string().trim().min(3,'add more word').max(50,'word').optional(),
+  productId:z.string('product id is required').min(3,'give valid id'),
+  currentStock:z.number('current stock required').int('valid number required').positive('possitive number requied'),
+  category:ZOD_CATEGORY
+})
+ 

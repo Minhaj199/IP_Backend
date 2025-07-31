@@ -6,9 +6,9 @@ import { invoiceModel } from "../model/InvoiceModel";
 import { SelectItemType } from "../utils/validator";
 import { generateInvoiceKey } from "../utils/ivoiceIdGenerator";
 
-export async function InvoiceStockAndTotolValidator(inputItems:SelectItemType,totalAmount:number,customerName:string,customerPhone:string){
+export async function InvoiceCreation(inputItems:SelectItemType,totalAmount:number,customerName:string,customerPhone:string){
  const session = await mongoose.startSession();
-   session.startTransaction();
+   
     try {
 
     //////////// checking total amount and each item total amount is current
@@ -16,7 +16,7 @@ export async function InvoiceStockAndTotolValidator(inputItems:SelectItemType,to
   if(calculatedTotal !== totalAmount) throw new Error ('Total amount must match sum of item totals')
     
   ///////////// starting a session/////
-  
+  session.startTransaction();
 
   ////////////// feching products///////////
 
@@ -82,4 +82,33 @@ export async function InvoiceStockAndTotolValidator(inputItems:SelectItemType,to
 }
   
  
+}
+
+export async function InvoiceDeletion(inputItems:SelectItemType,id:string){
+const session = await mongoose.startSession();
+ session.startTransaction()
+ try {
+  ////////////// product id and stock mapping////
+    const productId=inputItems.map(el=>({_id:el.productId,stock:el.quantity}))
+    console.log(productId)
+  /////////// buld operation for updating stock////
+
+    const bulkOps=productId.map((el)=>{
+      return{
+        updateOne:{
+          filter:{_id:el._id},
+          update:{$inc:{stock:el.stock}}
+        }
+      }
+    })
+    await productModel.bulkWrite(bulkOps,{session})
+    const result=await invoiceModel.deleteOne({_id:id},{session})
+    console.log(result)
+    await session.commitTransaction()
+    session.endSession()
+    return result
+ } catch (error) {
+ await session.abortTransaction()
+  session.endSession()
+ }
 }
