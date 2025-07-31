@@ -1,7 +1,7 @@
 import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 
-import { MongoDuplicateKeyError } from "../typesAndEnums"; 
-import { ErrorType } from "../constrains/errorTypesChan";
+import { MongoDuplicateKeyError } from "../types/typesAndEnums"; 
+import { ErrorType } from "../constrains/errorTypes";
 import { AppError } from "../errors/customError";
 import { HttpStatus } from "../constrains/statusCodeC";
 

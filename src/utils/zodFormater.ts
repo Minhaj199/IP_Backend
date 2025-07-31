@@ -1,5 +1,5 @@
 import { ZodError, ZodIssue } from "zod";
-import { ErrorType } from "../constrains/errorTypesChan";
+import { ErrorType } from "../constrains/errorTypes";
 import { AppError } from "../errors/customError";
 
 export function zodFormatedEror(zodData: ZodError): Record<string, string> {

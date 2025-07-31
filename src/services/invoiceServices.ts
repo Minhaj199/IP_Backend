@@ -1,4 +1,4 @@
-import { IIvoice, IIvoiceDoc, IproductDoc } from "../typesAndEnums";
+import { IIvoice, IIvoiceDoc, IproductDoc } from "../types/typesAndEnums";
 import mongoose from "mongoose";
 import { productModel } from "../model/product";
 

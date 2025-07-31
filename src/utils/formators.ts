@@ -1,4 +1,4 @@
-import { IIvoiceDoc } from "../typesAndEnums";
+import { IIvoiceDoc } from "../types/typesAndEnums";
 
 export function invoiceDate(MongoData: IIvoiceDoc[]) {
   if (MongoData.length === 0) return [];

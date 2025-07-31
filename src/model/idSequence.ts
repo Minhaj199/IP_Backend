@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { IproductidDoc } from "../typesAndEnums";
+import { IproductidDoc } from "../types/typesAndEnums";
 
 
 const schema=new mongoose.Schema<IproductidDoc>({

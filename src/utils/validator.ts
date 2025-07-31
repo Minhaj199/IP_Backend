@@ -1,5 +1,5 @@
 import z, { optional } from "zod";
-import { ZOD_CATEGORY, ZODE_UNITES } from "../typesAndEnums";
+import { ZOD_CATEGORY, ZODE_UNITES } from "../types/typesAndEnums";
 
 export const envSchema = z.object({
   NODE_ENV: z

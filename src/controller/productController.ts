@@ -2,14 +2,14 @@ import { NextFunction, Request, Response } from "express";
 import { ProductSchema, selectedItemSchema, stockInSchema } from "../utils/validator";
 import { AppError } from "../errors/customError";
 import { HttpStatus } from "../constrains/statusCodeC";
-import { ErrorType } from "../constrains/errorTypesChan";
+import { ErrorType } from "../constrains/errorTypes";
 import { zodFormatedEror } from "../utils/zodFormater";
-import { fetchAllProudct, IProductId } from "../typesAndEnums";
+import { fetchAllProudct, IProductId } from "../types/typesAndEnums";
 import { productModel } from "../model/product";
 import { generateProductId } from "../utils/idGenerator";
 import { capitalizeFirstLetter } from "../utils/firstLetterCapitalisor";
 import { productIdModel } from "../model/idSequence";
-import { ERROR_MESSAGES } from "../constrains/messagesC"
+import { ERROR_MESSAGES } from "../constrains/Messages"
 import { addStockIn } from "../services/productServices";
 
 export const productController = {

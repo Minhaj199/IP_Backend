@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { CATEGORY, IStockInDataDoc } from "../typesAndEnums";
+import { CATEGORY, IStockInDataDoc } from "../types/typesAndEnums";
 
 const schema=new mongoose.Schema<IStockInDataDoc>({
   quantity: {type:Number,require:true},

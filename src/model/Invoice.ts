@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { generateInvoiceKey } from "../utils/ivoiceIdGenerator";
-import { IIvoice, IIvoiceDoc } from "../typesAndEnums";
+import { IIvoice, IIvoiceDoc } from "../types/typesAndEnums";
 
 const schema=new mongoose.Schema<IIvoiceDoc>({
     _id:{type:String},
