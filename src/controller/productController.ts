@@ -9,6 +9,7 @@ import { productModel } from "../model/productModel";
 import { generateProductId } from "../utils/idGenerator";
 import { capitalizeFirstLetter } from "../utils/firstLetterCapitalisor";
 import { productIdModel } from "../model/idSequence";
+import { ERROR_MESSAGES } from "../constrains/Messages";
 
 export const productController = {
   addStock: async (req: Request, res: Response, next: NextFunction) => {
@@ -95,8 +96,7 @@ export const productController = {
   },
   fechprodutName: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const data = await productModel.find(
-        {},
+      const data = await productModel.find({stock:{$gt:0}},
         { name: 1, stock: 1, price: 1, unit: 1 }
       );
 
@@ -104,5 +104,16 @@ export const productController = {
     } catch (error) {
       next(error);
     }
+  },
+   fetchStock: async (req: Request, res: Response, next: NextFunction) => {
+      const {id} =req.params
+     try {
+       const currentStock= await productModel.findOne({_id:id},{stock:1,_id:0})
+       if(currentStock){
+         res.json(currentStock)
+       }
+     } catch (error) {
+       throw new Error(ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+     }
   },
 };

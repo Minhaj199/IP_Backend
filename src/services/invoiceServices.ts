@@ -1,9 +1,10 @@
-import {  IIvoice, IproductDoc } from "../typesAndEnums";
+import {  IIvoice, IIvoiceDoc, IproductDoc } from "../typesAndEnums";
 import mongoose from "mongoose";
 import { productModel } from "../model/productModel"; 
 
 import { invoiceModel } from "../model/InvoiceModel";
 import { SelectItemType } from "../utils/validator";
+import { generateInvoiceKey } from "../utils/ivoiceIdGenerator";
 
 export async function InvoiceStockAndTotolValidator(inputItems:SelectItemType,totalAmount:number,customerName:string,customerPhone:string){
  const session = await mongoose.startSession();
@@ -55,7 +56,8 @@ export async function InvoiceStockAndTotolValidator(inputItems:SelectItemType,to
  await productModel.bulkWrite(bulkOps,{session})
 
  ///////////invoice creation/////////
-  const invoiceDoc:IIvoice={
+  const invoiceDoc={
+    _id:generateInvoiceKey(),
     customerName,
     customerPhone,
     grandTotoal:totalAmount,

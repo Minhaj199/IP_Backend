@@ -56,5 +56,7 @@ export interface IIvoice{
   grandTotoal:number
 }
 export interface IIvoiceDoc extends IIvoice,Document{
-  
+  createdAt:Date
 }
+
+

@@ -7,6 +7,8 @@ import { zodArrayFormater, zodFormatedEror } from "../utils/zodFormater";
 import { ErrorType } from "../constrains/ErrorTypes";
 import { InvoiceStockAndTotolValidator } from "../services/invoiceServices";
 import { ERROR_MESSAGES } from "../constrains/Messages";
+import { invoiceModel } from "../model/InvoiceModel";
+import { invoiceDate } from "../utils/formators";
 
 export const invoiceController = {
   createInvoice: async (req: Request, res: Response, next: NextFunction) => {
@@ -53,4 +55,22 @@ export const invoiceController = {
       next(error);
     }
   },
+  fetchInvoices:async (req: Request, res: Response, next: NextFunction) =>{
+    try {
+      const {limit=5,page=1}=req.query
+      const pageLimit=Number(limit)
+      const currentPage=Number(page)
+  
+      const inv=await invoiceModel.find().sort({_id:-1}).skip((currentPage-1)*pageLimit).limit(pageLimit).lean()
+      const count=await invoiceModel.find().countDocuments()
+      res.json({invoices:invoiceDate(inv),totalCount:count})
+
+    } catch (error) {
+      if(error instanceof Error){
+
+        throw new Error(error.message)
+      } 
+      throw new Error(ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    }
+  }
 };
