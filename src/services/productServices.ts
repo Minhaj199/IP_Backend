@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { IStockInData } from "../typesAndEnums";
-import { productModel } from "../model/productModel";
+import { productModel } from "../model/product";
 import { stockInHistoryModel } from "../model/stockInHistory";
 
 

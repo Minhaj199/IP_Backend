@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { env } from "./env";
 import { productIdModel } from "../model/idSequence";
 import { generateProductId } from "../utils/idGenerator";
-import { productModel } from "../model/productModel";
+import { productModel } from "../model/product";
 
 
 export const dbConnection = async () => {
@@ -28,7 +28,6 @@ export async function idSequenceCreation(){
     }
     }else{
     }
-    console.log(generateProductId('P0001'))
   } catch (error) {
     throw new Error('error on id creation')
   }

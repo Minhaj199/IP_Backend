@@ -1,9 +1,9 @@
 import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 
 import { MongoDuplicateKeyError } from "../typesAndEnums"; 
-import { ErrorType } from "../constrains/ErrorTypes";
+import { ErrorType } from "../constrains/errorTypesChanged";
 import { AppError } from "../errors/customError";
-import { HttpStatus } from "../constrains/statusCodeContrain";
+import { HttpStatus } from "../constrains/statusCodeContrainChanged";
 
 export const erroHandler: ErrorRequestHandler = (
   error: unknown,

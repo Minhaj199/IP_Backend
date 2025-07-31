@@ -2,12 +2,12 @@ import { NextFunction, Request, Response } from "express";
 import { invoiceSchema, selectedItemSchema } from "../utils/validator";
 import { AppError } from "../errors/customError";
 import z, { ZodIssue } from "zod";
-import { HttpStatus } from "../constrains/statusCodeContrain";
+import { HttpStatus } from "../constrains/statusCodeContrainChanged";
 import { zodArrayFormater, zodFormatedEror } from "../utils/zodFormater";
-import { ErrorType } from "../constrains/ErrorTypes";
+import { ErrorType } from "../constrains/errorTypesChanged";
 import { InvoiceCreation, InvoiceDeletion } from "../services/invoiceServices";
-import { ERROR_MESSAGES } from "../constrains/Messages";
-import { invoiceModel } from "../model/InvoiceModel";
+import { ERROR_MESSAGES } from "../constrains/messagesChanged";
+import { invoiceModel } from "../model/Invoice";
 import { invoiceDate } from "../utils/formators";
 
 export const invoiceController = {
@@ -60,11 +60,9 @@ export const invoiceController = {
       const {limit=5,page=1}=req.query
       const pageLimit=Number(limit)
       const currentPage=Number(page)
-  
       const inv=await invoiceModel.find().sort({_id:-1}).skip((currentPage-1)*pageLimit).limit(pageLimit).lean()
       const count=await invoiceModel.find().countDocuments()
       res.json({invoices:invoiceDate(inv),totalCount:count})
-
     } catch (error) {
       if(error instanceof Error){
 
