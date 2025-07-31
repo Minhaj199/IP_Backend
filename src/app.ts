@@ -6,6 +6,7 @@ import morgan from "morgan";
 import { dbConnection, idSequenceCreation } from "./config/mongoDB";
 import { server } from "./config/server";
 import { pageNotFount } from "./middleware/404";
+import { erroHandler } from "./middleware/errorHandler";
 
 
 export const app = express();
@@ -38,4 +39,5 @@ idSequenceCreation()
 ///////////// db connection
 dbConnection();
 
-/////////////crone job//////////////////
+/////////////error handler//////////////////
+app.use(erroHandler)

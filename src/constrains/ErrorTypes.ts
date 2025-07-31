@@ -3,4 +3,5 @@ export enum ErrorType {
   GeneralError = "GereralError",
   INTERNAL = "InternalError",
   SUCCESS = "false",
+  ITEM_ERROR='itemError'
 }
