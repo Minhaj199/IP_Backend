@@ -48,3 +48,13 @@ export const fetchAllProudct = z.object({
     .max(10, "limit maximum 10"),
   page: z.coerce.number("current page not found").int(),
 });
+
+export interface IIvoice{
+  customerName:string,
+  customerPhone:string,
+  transaction:{productId: string,productName:string ,quantity: number,price: number,total:Number}[]
+  grandTotoal:number
+}
+export interface IIvoiceDoc extends IIvoice,Document{
+  
+}

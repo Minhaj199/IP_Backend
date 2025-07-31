@@ -1,10 +1,6 @@
 import z from "zod";
-import {  IProduct, IproductDoc, ZOD_CATEGORY, ZODE_UNITES } from "../typesAndEnums";
-import mongoose, { Types } from "mongoose";
-import { productModel } from "../model/productModel"; 
-import { AppError } from "../errors/customError";
-import { HttpStatus } from "../constrains/statusCodeContrain";
-import { ErrorType } from "../constrains/ErrorTypes";
+import { ZOD_CATEGORY, ZODE_UNITES } from "../typesAndEnums";
+
 export const envSchema = z.object({
   NODE_ENV: z
     .enum(["development", "production", "test"])
@@ -36,7 +32,7 @@ export const selectedItemSchema = z.object({
     path: ["total"]
   }
 ).array().min(1, "At least one item is required")
-type SelectItemType=z.infer<typeof selectedItemSchema>
+export type SelectItemType=z.infer<typeof selectedItemSchema>
 export const invoiceSchema = z.object({
   customerName: z.string().min(3, "Name is required"),
   customerPhone: z.string().regex(/^[0-9]{10,14}$/, "Phone number must be 10 digits"),
@@ -53,63 +49,3 @@ export const invoiceSchema = z.object({
 //   }
 // );
 
-export async function InvoiceStockAndTotolValidator(inputItems:SelectItemType,totalAmount:number){
-  try {
-
-    //////////// checking total amount and each item total amount is current
-    const calculatedTotal = inputItems.reduce((sum, item) => sum + item.total, 0);
-  if(calculatedTotal !== totalAmount) throw new Error ('Total amount must match sum of item totals')
-    
-  ///////////// starting a session/////
-  const session=await mongoose.startSession()
-
-  ////////////// feching products///////////
-
-  const prodctIds=inputItems.map(p=>p.productId)
-  console.log(prodctIds)
-  const products:IproductDoc[]=await productModel.find({_id:{$in:prodctIds}}).session(session)
-    
-  console.log(products)
-  /////////////// creating map to check products and stock//////////
-
-  const productMap=new Map()
-  for(const p of products){
-    console.log(p)
-    productMap.set(p._id ,p)
-  } 
-      console.log('79')
-console.log(productMap.keys())
-
- // validating stock of items
-  for(const item of inputItems){
-    console.log(item.productId)
-    
-    const product=productMap.get(item.productId)
-    console.log(product)
-    if(!product) throw new Error(`${item.productName} not found`)
-      console.log('83')
-    if(item.quantity>product.stock){
-      throw new Error(`${product.name} only ${product.stock}`)
-    }
-  }
-    console.log(productMap)
- 
-  // stock update
-  const bulkOps=inputItems.map(item=>{
-    return {
-      updateOne:{
-        filter:{_id:item.productId},
-        update:{$inc:{stock:-item.quantity}}
-      }
-    }
-  })
- const logResult=await productModel.bulkWrite(bulkOps,{session})
- console.log(logResult)
-} catch (error ) {
-  if(error instanceof Error){
-    throw new Error(error.message)
-  }
-}
-  
- 
-}
