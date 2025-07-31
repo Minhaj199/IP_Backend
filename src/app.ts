@@ -23,8 +23,11 @@ app.use(cors(corsOpetion));
 app.use(morgan("tiny"));
 
 /// routes//////
-
+app.get('/',(req,res)=>{
+  res.send('entered to server')
+})
 app.use("/api", router);
+
 ////////////404 route/////
 app.use(pageNotFount);
 ///////////// server//////
