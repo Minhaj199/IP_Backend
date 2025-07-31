@@ -1,5 +1,5 @@
-import { ErrorType } from "../constrains/errorTypes";
-import { HttpStatus } from "../constrains/statusCodeC";
+import { ErrorType } from "../types/errorTypes"; 
+import { HttpStatus } from "../types/statusCodeC"; 
 
 export class AppError extends Error {
   public statusCode: number;

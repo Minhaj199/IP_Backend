@@ -1,6 +1,6 @@
 import { ZodError, ZodIssue } from "zod";
-import { ErrorType } from "../constrains/errorTypes";
-import { AppError } from "../errors/customError";
+import { ErrorType } from "../types/errorTypes"; 
+
 
 export function zodFormatedEror(zodData: ZodError): Record<string, string> {
   console.log(zodData);
