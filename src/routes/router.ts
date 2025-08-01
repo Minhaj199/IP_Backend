@@ -6,13 +6,17 @@ export {router}
 
 
 router.post('/add-product',productController.addStock)
+router.patch('/stock-in/:id',productController.stockIn)
 router.get('/stock-list',productController.fetchAllProudct)
-router.put('/stock-in/:id',productController.stockIn)
+
+
+
 
 ///////////////// fetch prodct data when field input
+////////// for stock in
 router.get('/fetch-productsdata',productController.fechprodutsData)
+    ///////////// its for invoice creation/////
 router.get('/fetch-productname',productController.fechprodutName)
-router.get('/fetch-stock/:id',productController.fetchStock)
 
 router.post('/add-invoice',invoiceController.createInvoice)
 router.get('/fetch-invoice',invoiceController.fetchInvoices)

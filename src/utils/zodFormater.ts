@@ -3,7 +3,6 @@ import { ErrorType } from "../types/errorTypes";
 
 
 export function zodFormatedEror(zodData: ZodError): Record<string, string> {
-  console.log(zodData);
   const errorData: Record<string, string> = {};
   zodData.issues.forEach((issue) => {
     const field = issue.path.join(".") || ErrorType.GeneralError;
@@ -16,7 +15,6 @@ export function zodArrayFormater(zodErrors: ZodIssue[]) {
   const formatted: Record<string, string> = {};
 
   for (const err of zodErrors) {
-    console.log(err.message);
     const path = err.path;
     if (
       Array.isArray(path) &&
@@ -25,13 +23,10 @@ export function zodArrayFormater(zodErrors: ZodIssue[]) {
       typeof path[1] === "string"
     ) {
       const index = path[0];
-      console.log([path[1]]);
       if (!(index in formatted)) {
         formatted[index] = err.message;
       }
     }
-    console.log("28");
-    // console.log(formatted)
     return formatted;
   }
 }

@@ -6,11 +6,12 @@ import { dbConnection, idSequenceCreation } from "./config/mongoDB";
 import { server } from "./config/server";
 import { pageNotFount } from "./middleware/404";
 import { erroHandler } from "./middleware/errorHandler";
+import { env } from "./config/env";
 
 export const app = express();
 
 const corsOpetion = {
-  origin: ["http://localhost:5173"],
+  origin: [env.FRONTEND_URL],
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   exposedHeaders: ["authorizationforuser"],
 };

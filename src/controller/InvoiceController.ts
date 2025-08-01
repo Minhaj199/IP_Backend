@@ -74,9 +74,9 @@ export const invoiceController = {
   deleteInvoice:async (req: Request, res: Response, next: NextFunction) =>{
       try {
         const {id}=req.params
-        
+       
         if(!id||id.length<3)throw new Error('not valid parms')
-        const validateData=selectedItemSchema.safeParse(req.body.items)
+        const validateData=selectedItemSchema.safeParse(req.body)
           if(validateData.success){
             const result=await InvoiceDeletion(validateData.data,id)
             if(result){
@@ -88,8 +88,7 @@ export const invoiceController = {
           }else{
             throw new AppError('zod validation error',HttpStatus.BAD_REQUEST,ErrorType.GeneralError,zodArrayFormater( validateData.error.issues))
           }
-      } catch (error) {
-     
+      } catch (error) {  
       next(error)    
       }
   }

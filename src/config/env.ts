@@ -15,5 +15,5 @@ export const env = {
   NODE_ENV: parsedEnv.data.NODE_ENV,
   PORT: Number(parsedEnv.data.PORT),
   MONGO_URI: parsedEnv.data.MONGO_URI,
- 
+  FRONTEND_URL:parsedEnv.data.FRONTEND_URL
 };

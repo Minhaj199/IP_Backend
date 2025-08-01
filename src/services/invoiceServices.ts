@@ -80,7 +80,7 @@ export async function InvoiceCreation(
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
-    console.log(error);
+
     if (error instanceof Error) {
       throw new Error(error.message);
     } else {
@@ -98,7 +98,7 @@ export async function InvoiceDeletion(inputItems: SelectItemType, id: string) {
       _id: el.productId,
       stock: el.quantity,
     }));
-    console.log(productId);
+   
     /////////// buld operation for updating stock////
 
     const bulkOps = productId.map((el) => {
@@ -111,7 +111,7 @@ export async function InvoiceDeletion(inputItems: SelectItemType, id: string) {
     });
     await productModel.bulkWrite(bulkOps, { session });
     const result = await invoiceModel.deleteOne({ _id: id }, { session });
-    console.log(result);
+
     await session.commitTransaction();
     session.endSession();
     return result;

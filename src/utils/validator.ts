@@ -7,6 +7,7 @@ export const envSchema = z.object({
     .default("development"),
   PORT: z.string().default("3000"),
   MONGO_URI: z.string().min(1, "MONGO_URI is required"),
+  FRONTEND_URL:z.url()
 });
 export const ProductSchema = z
   .object({
@@ -19,6 +20,8 @@ export const ProductSchema = z
     unit: ZODE_UNITES,
     initialStock: z.coerce
       .number("stock not found")
+      .nonnegative('negetive not accepted')
+      .int('decimal value not valid')
       .max(100000, "maximum limt 100000 reached")
       .transform((val) => Math.floor(val))
       .optional(),
@@ -26,6 +29,7 @@ export const ProductSchema = z
       .number("price not found")
       .min(0.1, "Insert value more than 0.1")
       .max(10000, "max limit 10000 raeched"),
+
   })
   .refine(
     (data) => (data.unit !== "Box", { path: ["unit"], messege: "not valid" })
@@ -59,14 +63,14 @@ export const stockInSchema = z.object({
   quantity: z.coerce
     .number("quenatity required")
     .positive("possitive number required")
-    .int("decimimal value not find"),
+    .int("decimimal value not valid"),
   source: z
     .string("source required")
     .trim()
     .min(2, "please add more word")
-    .max(50, "max limit reached"),
+    .max(20, "max limit reached 20 reached"),
   remark: z.string().trim().min(3, "add more word").max(50, "word").optional(),
   productId: z.string("product id is required").min(3, "give valid id"),
-  currentStock: z.number("current stock required").int("valid number required"),
+  currentStock: z.number("current stock required").int("valid number required").nonnegative('negtive number').min(1,'please add valid stock'),
   category: ZOD_CATEGORY,
 });

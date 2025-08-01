@@ -39,7 +39,7 @@ export const productController = {
               { sequence: currentSequence.sequence },
               { $set: { sequence: result._id } }
             );
-            return res.json(result);
+            return res.json({success:true});
           } else {
             throw new AppError(
               "Error on product creation",
@@ -70,24 +70,20 @@ export const productController = {
       if (validatQuery.success) {
         const totalCount = await productModel.find().countDocuments();
         const fetchProducts = await productModel
-          .find()
+          .find({},{_id:0,name:1,category:1,unit:1,price:1,stock:1})
           .sort({ _id: -1 })
           .skip((validatQuery.data.page - 1) * validatQuery.data.limit)
           .limit(validatQuery.data.limit);
         return res.json({ totalCount, products: fetchProducts });
       } else {
-        throw new AppError(
-          "zod validation failed",
-          HttpStatus.BAD_REQUEST,
-          ErrorType.GeneralError,
-          zodFormatedEror(validatQuery.error)
-        );
+        throw new Error('unexped error')
       }
     } catch (error) {
       next(error);
     }
   },
   fechprodutsData: async (req: Request, res: Response, next: NextFunction) => {
+    ////////////// fetch product data for stock in/////////////
     try {
       const fetchProducts = await productModel.find().sort({ _id: -1 });
       return res.json([...fetchProducts]);
@@ -96,6 +92,7 @@ export const productController = {
     }
   },
   fechprodutName: async (req: Request, res: Response, next: NextFunction) => {
+    ///////////// its for invoice creation/////
     try {
       const data = await productModel.find({stock:{$gt:0}},
         { name: 1, stock: 1, price: 1, unit: 1 }
@@ -119,6 +116,7 @@ export const productController = {
   },
   stockIn:async (req: Request, res: Response, next: NextFunction) =>{
     try {
+     
       const {id} =req.params
       if(!id||id.length<3){
         throw new Error('id not found')
@@ -128,7 +126,7 @@ export const productController = {
         await addStockIn(validateUpdateData.data,id)
         res.json({success:true})
       }else{
-        throw new AppError('zod error',HttpStatus.BAD_REQUEST,ErrorType.FieldError,zodFormatedEror(validateUpdateData.error))
+        throw new AppError('input data error',HttpStatus.BAD_REQUEST,ErrorType.FieldError,zodFormatedEror(validateUpdateData.error))
       }
     } catch (error) {
       next(error)
