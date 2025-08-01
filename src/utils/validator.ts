@@ -71,6 +71,6 @@ export const stockInSchema = z.object({
     .max(20, "max limit reached 20 reached"),
   remark: z.string().trim().min(3, "add more word").max(50, "word").optional(),
   productId: z.string("product id is required").min(3, "give valid id"),
-  currentStock: z.number("current stock required").int("valid number required").nonnegative('negtive number').min(1,'please add valid stock'),
+  currentStock: z.number("current stock required").int("valid number required").nonnegative('negtive number').int('input validation faild'),
   category: ZOD_CATEGORY,
 });
